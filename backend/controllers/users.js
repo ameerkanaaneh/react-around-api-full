@@ -1,5 +1,10 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+dotenv.config();
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 function handleErrs(err, res) {
   if (err.name === "CastError") {
@@ -77,4 +82,34 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => handleErrs(err, res));
+};
+
+// login contoller
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        throw new Error("Incorrect email or password");
+      } else {
+        req._id = user._id;
+        return bcrypt.compare(password, user.password);
+      }
+    })
+    .then((matched) => {
+      if (!matched) {
+        throw new Error("Incorrect email or password");
+      } else {
+        const token = jwt.sign(
+          { _id: req._id },
+          NODE_ENV === "production" ? JWT_SECRET : "super-secret",
+          { expiresIn: "7d" }
+        );
+        res.send({ token });
+      }
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
 };
