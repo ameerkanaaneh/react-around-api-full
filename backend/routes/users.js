@@ -12,9 +12,15 @@ const {
 router.get("/users", getUsers);
 // get a user based on the id
 router.get("/users/:id", getUser);
-// add a new user
+// update profile
+router.patch("/users/me", updateProfile);
+// update Avatar`
+router.patch("/users/me/avatar", updateAvatar);
+// signin
+router.post("/signin", login);
+// sigup
 router.post(
-  "/users",
+  "/signup",
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -26,9 +32,5 @@ router.post(
   }),
   addUser
 );
-// update profile
-router.patch("/users/me", updateProfile);
-// update Avatar`
-router.patch("/users/me/avatar", updateAvatar);
 
 module.exports = router;
