@@ -1,15 +1,16 @@
-const User = require('../models/user');
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
 
 function handleErrs(err, res) {
-  if (err.name === 'CastError') {
-    return res.status(400).send({ message: 'NotValid Data' });
+  if (err.name === "CastError") {
+    return res.status(400).send({ message: "NotValid Data" });
   }
-  if (err.name === 'DocumentNotFoundError') {
-    return res.status(404).send({ message: 'User not found' });
+  if (err.name === "DocumentNotFoundError") {
+    return res.status(404).send({ message: "User not found" });
   }
   return res
     .status(500)
-    .send({ message: 'An error has occurred on the server' });
+    .send({ message: "An error has occurred on the server" });
 }
 
 // get all users
@@ -27,7 +28,7 @@ module.exports.getUser = (req, res) => {
     .then((data) => {
       const { users } = data;
       if (!users.find((user) => user._id === req.params.id)) {
-        res.status(404).send({ message: 'User not found' });
+        res.status(404).send({ message: "User not found" });
       } else {
         res.send(users.find((user) => user._id === req.params.id));
       }
@@ -37,16 +38,19 @@ module.exports.getUser = (req, res) => {
 
 // add a new user
 module.exports.addUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const { name, about, avatar, email, password } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'User validation failed' });
+      if (err.name === "ValidationError") {
+        res.status(400).send({ message: "User validation failed" });
       } else {
         res
           .status(500)
-          .send({ message: 'An error has occurred on the server' });
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -57,7 +61,7 @@ module.exports.updateProfile = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { runValidators: true, new: true },
+    { runValidators: true, new: true }
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => handleErrs(err, res));
@@ -69,7 +73,7 @@ module.exports.updateAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { runValidators: true, new: true },
+    { runValidators: true, new: true }
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => handleErrs(err, res));

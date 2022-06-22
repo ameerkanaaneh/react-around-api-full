@@ -6,17 +6,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true,
+    default: "Jacques Cousteau",
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true,
+    default: "Explorer",
   },
   avatar: {
     type: String,
-    required: true,
+    default: "https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg",
     validate: {
       validator(v) {
         const regex =
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     },
   },
   email: {
-    type: email,
+    type: string,
     required: true,
     unique: true,
     validate: {
@@ -36,10 +36,10 @@ const userSchema = new mongoose.Schema({
       },
     },
   },
-
   password: {
-    type: password,
+    type: string,
     required: true,
+    minlength: 8,
   },
 });
 

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
 const helmet = require("helmet");
+const { errors } = require("celebrate");
 
 // const cardsPath = path.join(__dirname, '/routes/cards.js');
 // const usersPath = path.join(__dirname, '/routes/users.js');
@@ -19,6 +20,8 @@ app.use(bodyParser.json());
 mongoose.connect("mongodb://localhost:27017/aroundb");
 
 app.use(helmet());
+
+app.use(errors());
 
 // a temporary solution to add an owner to each card
 app.use((req, res, next) => {
