@@ -1,0 +1,7 @@
+.element__likes-wrapper {
+  display: flex;
+  min-width: 21px;
+  flex-direction: column;
+  gap: 3px;
+  vertical-align: center;
+}

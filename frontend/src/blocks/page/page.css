@@ -1,0 +1,15 @@
+.page {
+  background-color: black;
+  text-align: center;
+  font-family: "Inter", Arial, sans-serif;
+  color: white;
+  margin: 0;
+  position: relative;
+  padding: 0 50px;
+}
+
+@media screen and (max-width: 320px) {
+  .page {
+    padding: 0;
+  }
+}

@@ -1,0 +1,10 @@
+.header__title {
+  text-align: left;
+  max-height: 33px;
+}
+
+@media screen and (max-width: 320px) {
+  .header__title {
+    max-width: 126px;
+  }
+}

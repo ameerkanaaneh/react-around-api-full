@@ -1,0 +1,14 @@
+.header__navLink {
+  /* align-self: center; */
+  padding-bottom: 46px;
+  max-height: 22px;
+  font-weight: 400;
+  line-height: 22px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.header__navLink:hover {
+  color: #a9a9a9;
+}

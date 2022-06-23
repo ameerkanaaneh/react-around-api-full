@@ -1,0 +1,8 @@
+.popup__name {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: normal;
+  text-align: left;
+  align-self: flex-start;
+  margin: 10px 0 0;
+}

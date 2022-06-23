@@ -1,0 +1,17 @@
+.element__image {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  max-width: 282px;
+  max-height: 282px;
+  min-height: 282px;
+}
+
+.element__image:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .element__image {
+    max-width: none;
+  }
+}

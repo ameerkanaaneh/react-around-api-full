@@ -1,0 +1,16 @@
+.pageEntry {
+  background-color: black;
+  text-align: center;
+  font-family: "Inter", Arial, sans-serif;
+  color: white;
+  margin: 0;
+  position: relative;
+  padding: 0 50px;
+  min-height: 100vh;
+}
+
+@media screen and (max-width: 320px) {
+  .pageEntry {
+    padding: 0;
+  }
+}

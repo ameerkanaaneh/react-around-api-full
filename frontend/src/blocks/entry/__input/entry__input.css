@@ -1,0 +1,17 @@
+.entry__input {
+  width: 100%;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 2px solid #cccccc;
+  background-color: black;
+  padding: 0 0 13px 0;
+  color: #fff;
+}
+
+.entry__input::placeholder {
+  color: #cccccc;
+}
+
+.entry__input:focus {
+  outline: none;
+}
