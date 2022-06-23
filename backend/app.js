@@ -6,6 +6,8 @@ const path = require("path");
 const helmet = require("helmet");
 const { errors } = require("celebrate");
 
+const auth = require("./middleware/auth");
+
 // const cardsPath = path.join(__dirname, '/routes/cards.js');
 // const usersPath = path.join(__dirname, '/routes/users.js');
 
@@ -31,6 +33,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(auth);
 
 app.use("/", usersRouter);
 app.use("/", cardsRouter);
