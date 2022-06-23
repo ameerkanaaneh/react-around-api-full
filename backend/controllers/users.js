@@ -89,6 +89,7 @@ module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findOne({ email })
+    .select("+password")
     .then((user) => {
       if (!user) {
         throw new Error("Incorrect email or password");
@@ -112,4 +113,18 @@ module.exports.login = (req, res) => {
     .catch((err) => {
       res.status(401).send({ message: err.message });
     });
+};
+
+// get my user
+module.exports.getMyUser = (req, res) => {
+  User.findById(req.user._id)
+    .then((data) => {
+      const { users } = data;
+      if (!users.find((user) => user._id === req.user._id)) {
+        res.status(404).send({ message: "User not found" });
+      } else {
+        res.send(users.find((user) => user));
+      }
+    })
+    .catch((err) => handleErrs(err, res));
 };

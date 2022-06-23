@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const { errors } = require("celebrate");
 
 const auth = require("./middleware/auth");
+const { addUser, login } = require("./controllers/users");
 
 // const cardsPath = path.join(__dirname, '/routes/cards.js');
 // const usersPath = path.join(__dirname, '/routes/users.js');
@@ -25,19 +26,25 @@ app.use(helmet());
 
 app.use(errors());
 
-// a temporary solution to add an owner to each card
-app.use((req, res, next) => {
-  req.user = {
-    _id: "6290e73ac12beb7de1c8db27",
-  };
+app.use("/", auth, usersRouter);
+app.use("/", auth, cardsRouter);
 
-  next();
-});
-
-app.use(auth);
-
-app.use("/", usersRouter);
-app.use("/", cardsRouter);
+// signin
+app.post("/signin", login);
+// sigup
+app.post(
+  "/signup",
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      avatar: Joi.string().uri(),
+      email: Joi.string().required(),
+      password: Joi.string().required().min(8),
+    }),
+  }),
+  addUser
+);
 
 app.use("/", (req, res) => {
   res.status(404).send({ message: "Requested resource not found" });
