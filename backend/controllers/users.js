@@ -2,62 +2,50 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const NotFoundError = require("../errors/NotFoundError");
+const AuthError = require("../errors/AuthError");
+const BadRequestError = require("../errors/BadRequestError");
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-function handleErrs(err, res) {
-  if (err.name === "CastError") {
-    return res.status(400).send({ message: "NotValid Data" });
-  }
-  if (err.name === "DocumentNotFoundError") {
-    return res.status(404).send({ message: "User not found" });
-  }
-  return res
-    .status(500)
-    .send({ message: "An error has occurred on the server" });
-}
-
 // get all users
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch((err) => handleErrs(err, res));
+    .catch(next);
 };
 
 // get an user based on the id
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
       const { users } = data;
       if (!users.find((user) => user._id === req.params.id)) {
-        res.status(404).send({ message: "User not found" });
+        throw new NotFoundError("User not found");
       } else {
         res.send(users.find((user) => user._id === req.params.id));
       }
     })
-    .catch((err) => handleErrs(err, res));
+    .catch(next);
 };
 
 // add a new user
-module.exports.addUser = (req, res) => {
+module.exports.addUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
 
-    .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(400).send({ message: "User validation failed" });
-      } else {
-        res
-          .status(500)
-          .send({ message: "An error has occurred on the server" });
+    .then((user) => {
+      if (!user) {
+        throw new AuthError("cannot create the user please try again");
       }
-    });
+      res.send({ data: user });
+    })
+    .catch(next);
 };
 
 // update profile
@@ -68,31 +56,43 @@ module.exports.updateProfile = (req, res) => {
     { name, about },
     { runValidators: true, new: true }
   )
-    .then((user) => res.send({ data: user }))
-    .catch((err) => handleErrs(err, res));
+    .then((user) => {
+      if (!user) {
+        throw new BadRequestError("cannot update profile, please try again");
+      }
+      res.send({ data: user });
+    })
+    .catch(next);
 };
 
 // update avatar
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
     { runValidators: true, new: true }
   )
-    .then((user) => res.send({ data: user }))
-    .catch((err) => handleErrs(err, res));
+    .then((user) => {
+      if (!user) {
+        throw new BadRequestError(
+          "cannot update avatar, please try again later"
+        );
+      }
+      res.send({ data: user });
+    })
+    .catch(next);
 };
 
 // login contoller
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findOne({ email })
     .select("+password")
     .then((user) => {
       if (!user) {
-        throw new Error("Incorrect email or password");
+        throw new AuthError("Incorrect email or password");
       } else {
         req._id = user._id;
         return bcrypt.compare(password, user.password);
@@ -100,7 +100,7 @@ module.exports.login = (req, res) => {
     })
     .then((matched) => {
       if (!matched) {
-        throw new Error("Incorrect email or password");
+        throw new AuthError("Incorrect email or password");
       } else {
         const token = jwt.sign(
           { _id: req._id },
@@ -110,21 +110,19 @@ module.exports.login = (req, res) => {
         res.send({ token });
       }
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };
 
 // get my user
-module.exports.getMyUser = (req, res) => {
+module.exports.getMyUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((data) => {
       const { users } = data;
       if (!users.find((user) => user._id === req.user._id)) {
-        res.status(404).send({ message: "User not found" });
+        throw new NotFoundError("cannot find user");
       } else {
         res.send(users.find((user) => user));
       }
     })
-    .catch((err) => handleErrs(err, res));
+    .catch(next);
 };
