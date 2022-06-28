@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
 const helmet = require("helmet");
-const { errors } = require("celebrate");
+const { celebrate, Joi, errors } = require("celebrate");
 
-const auth = require("./middleware/auth");
+const auth = require("./middlewares/auth");
 const { addUser, login } = require("./controllers/users");
 
 // const cardsPath = path.join(__dirname, '/routes/cards.js');

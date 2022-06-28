@@ -5,6 +5,7 @@ const {
   getUser,
   updateProfile,
   updateAvatar,
+  getMyUser,
 } = require("../controllers/users");
 
 // get all users
