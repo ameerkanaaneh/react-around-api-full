@@ -39,6 +39,12 @@ app.options("*", cors());
 app.use("/", auth, usersRouter);
 app.use("/", auth, cardsRouter);
 
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 // signin
 app.post(
   "/signin",
