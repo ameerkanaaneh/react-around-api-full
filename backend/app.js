@@ -6,6 +6,7 @@ const path = require("path");
 const helmet = require("helmet");
 const validator = require("validator");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const cors = require("cors");
 
 const auth = require("./middlewares/auth");
 const { addUser, login } = require("./controllers/users");
@@ -31,6 +32,9 @@ mongoose.connect("mongodb://localhost:27017/aroundb");
 app.use(helmet());
 
 app.use(requestLogger);
+
+app.use(cors());
+app.options("*", cors());
 
 app.use("/", auth, usersRouter);
 app.use("/", auth, cardsRouter);
