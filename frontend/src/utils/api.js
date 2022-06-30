@@ -104,7 +104,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/group-12",
+  baseUrl: "https://api.around-the-us.students.nomoreparties.sbs",
   headers: {
     authorization: "82cfb778-0110-4074-beef-5e31af26dd47",
   },

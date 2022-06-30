@@ -14,7 +14,7 @@ export const register = (email, password) => {
       }
     })
     .then((data) => {
-      if (!data.messgae) {
+      if (!data.message) {
         return data;
       } else {
         return;
