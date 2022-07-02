@@ -14,7 +14,6 @@ export const register = (email, password) => {
       }
     })
     .then((data) => {
-      console.log(data);
       if (!data.message) {
         return data;
       } else {
@@ -38,7 +37,7 @@ export const authorize = (email, password) => {
       }
     })
     .then((data) => {
-      if (data.token) {
+      if (!data.message) {
         localStorage.setItem("token", data.token);
         return data;
       } else {
@@ -52,13 +51,17 @@ export const checkToken = (token) =>
   fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
+      Acccept: "application/json",
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     },
   })
     .then((res) => {
-      if (res) {
-        return res.json();
-      }
+      return res.ok
+        ? res.json()
+        : Promise.reject(`${res.status} - ${res.message}`);
     })
-    .then((data) => data);
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => console.log(err));

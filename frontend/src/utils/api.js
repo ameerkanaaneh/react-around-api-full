@@ -4,9 +4,12 @@ class Api {
     this.headers = headers;
   }
 
-  loadUserInfo() {
+  loadUserInfo(token) {
     return fetch(`${this.url}/users/me`, {
-      headers: { authorization: this.headers.authorization },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
     }).then(this._checkResponse);
   }
 
@@ -17,17 +20,20 @@ class Api {
     return Promise.reject(`Error: ${res.status}`);
   }
 
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this.url}/cards`, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
     }).then(this._checkResponse);
   }
 
-  editProfileData(name, about) {
+  editProfileData(name, about, token) {
     return fetch(`${this.url}/users/me`, {
       method: "PATCH",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -37,11 +43,11 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  addNewCard(name, link) {
+  addNewCard(name, link, token) {
     return fetch(`${this.url}/cards`, {
       method: "POST",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -51,11 +57,11 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  deleteCard(id) {
+  deleteCard(id, token) {
     return fetch(`${this.url}/cards/${id}`, {
       method: "DELETE",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -65,11 +71,11 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  likeCard(id) {
+  likeCard(id, token) {
     return fetch(`${this.url}/cards/likes/${id}`, {
       method: "PUT",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -77,11 +83,11 @@ class Api {
       }),
     }).then(this._checkResponse);
   }
-  unlikeCard(id) {
+  unlikeCard(id, token) {
     return fetch(`${this.url}/cards/likes/${id}`, {
       method: "DELETE",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -89,11 +95,11 @@ class Api {
       }),
     }).then(this._checkResponse);
   }
-  changeProfileAvatar(link) {
+  changeProfileAvatar(link, token) {
     return fetch(`${this.url}/users/me/avatar`, {
       method: "PATCH",
       headers: {
-        authorization: this.headers.authorization,
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -105,8 +111,5 @@ class Api {
 
 const api = new Api({
   baseUrl: "https://api.around-the-us.students.nomoreparties.sbs",
-  headers: {
-    authorization: "82cfb778-0110-4074-beef-5e31af26dd47",
-  },
 });
 export default api;
