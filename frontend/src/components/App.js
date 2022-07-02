@@ -61,7 +61,7 @@ function App() {
         setCards([...cards, ...loadedCards]);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [cards]);
 
   React.useEffect(() => {
     api

@@ -36,8 +36,8 @@ app.use(requestLogger);
 app.use(cors());
 app.options("*", cors());
 
-app.use("/", auth, usersRouter);
-app.use("/", auth, cardsRouter);
+app.use("/cards", auth, usersRouter);
+app.use("/users", auth, cardsRouter);
 
 app.get("/crash-test", () => {
   setTimeout(() => {
