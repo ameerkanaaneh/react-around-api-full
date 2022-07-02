@@ -16,8 +16,8 @@ export default function Register(props) {
     e.preventDefault();
     auth
       .register(data.email, data.password)
-      .then((res) => {
-        if (!res.data) {
+      .then((data) => {
+        if (!data) {
           setImageUrl(fail);
           setMessage("Oops, something went wrong! Please try again.");
           setState(true);

@@ -1,4 +1,4 @@
-export const BASE_URL = "https://register.nomoreparties.co";
+export const BASE_URL = "https://api.around-the-us.students.nomoreparties.sbs";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -14,6 +14,7 @@ export const register = (email, password) => {
       }
     })
     .then((data) => {
+      console.log(data);
       if (!data.message) {
         return data;
       } else {
