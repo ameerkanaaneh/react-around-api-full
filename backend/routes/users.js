@@ -17,56 +17,25 @@ const {
   getMyUser,
 } = require("../controllers/users");
 
-// get all users
-router.get(
-  "/users",
-  celebrate({
-    headers: Joi.object().keys({
-      authorization: Joi.string()
-        .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-        .required(),
-    }),
-  }),
-  getUsers
-);
+// // get all users
+// router.get(
+//   "/",
+//   celebrate({
+//     headers: Joi.object().keys({
+//       authorization: Joi.string()
+//         .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
+//         .required(),
+//     }),
+//   }),
+//   getUsers
+// );
 // get a user based on the id
-router.get(
-  "/users/:id",
-  celebrate({
-    headers: Joi.object().keys({
-      authorization: Joi.string()
-        .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-        .required(),
-    }),
-    params: Joi.object().keys({
-      id: Joi.string()
-        .regex(/^[A-Fa-f0-9]*/)
-        .required(),
-    }),
-  }),
-  getUser
-);
-// get user data
-router.get(
-  "/users/me",
-  celebrate({
-    headers: Joi.object().keys({
-      authorization: Joi.string()
-        .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-        .required(),
-    }),
-  }),
-  getMyUser
-);
+router.get("/", getUser);
+
 // update profile
 router.patch(
-  "/users/me",
+  "/me",
   celebrate({
-    headers: Joi.object().keys({
-      authorization: Joi.string()
-        .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-        .required(),
-    }),
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
@@ -76,13 +45,8 @@ router.patch(
 );
 // update Avatar`
 router.patch(
-  "/users/me/avatar",
+  "/me/avatar",
   celebrate({
-    headers: Joi.object().keys({
-      authorization: Joi.string()
-        .regex(/^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-        .required(),
-    }),
     body: Joi.object().keys({
       avatar: Joi.string().required().custom(validateURL),
     }),

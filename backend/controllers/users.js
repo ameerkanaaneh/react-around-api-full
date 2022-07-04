@@ -16,19 +16,15 @@ module.exports.getUsers = (req, res, next) => {
       res.send(users);
     })
     .catch(next);
+  User.findById(req.user._id)
+    .then((user) => res.send({ data: user }))
+    .catch(next);
 };
 
 // get an user based on the id
 module.exports.getUser = (req, res, next) => {
-  User.findById(req.params.id)
-    .then((data) => {
-      const { users } = data;
-      if (!users.find((user) => user._id === req.params.id)) {
-        throw new NotFoundError("User not found");
-      } else {
-        res.send(users.find((user) => user._id === req.params.id));
-      }
-    })
+  User.findById(req.user._id)
+    .then((user) => res.send({ data: user }))
     .catch(next);
 };
 
@@ -48,18 +44,21 @@ module.exports.addUser = (req, res, next) => {
 };
 
 // update profile
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
-    req.user._id,
-    { name, about },
-    { runValidators: true, new: true }
+    { _id: req.user._id },
+    { $set: { name, about } },
+    { new: true, runValidators: true }
   )
-    .then((user) => {
-      if (!user) {
-        throw new BadRequestError("cannot update profile, please try again");
+    .select("+password")
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        throw new BadRequestError(
+          "Unable to update user. Please try again later."
+        );
       }
-      res.send({ data: user });
     })
     .catch(next);
 };
@@ -107,20 +106,6 @@ module.exports.login = (req, res, next) => {
           { expiresIn: "7d" }
         );
         res.send({ token });
-      }
-    })
-    .catch(next);
-};
-
-// get my user
-module.exports.getMyUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .then((data) => {
-      const { users } = data;
-      if (!users.find((user) => user._id === req.user._id)) {
-        throw new NotFoundError("cannot find user");
-      } else {
-        res.send(users.find((user) => user));
       }
     })
     .catch(next);

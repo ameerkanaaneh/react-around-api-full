@@ -5,8 +5,9 @@ export default function Card(props) {
   const { card } = props;
 
   const currentUser = React.useContext(CurrentUserContext);
-  const isOwn = card.owner._id === currentUser._id;
-  const isLiked = card.likes.some((user) => user._id === currentUser._id);
+  const isOwn = card.owner === currentUser._id;
+  // console.log(card.likes);
+  const isLiked = currentUser && card.likes.includes(currentUser._id);
 
   function handleClick() {
     props.onCardClick(card);

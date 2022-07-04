@@ -14,6 +14,7 @@ export default function Login(props) {
     setMessage,
     setState,
     handleLogin,
+    setToken,
   } = props;
 
   React.useEffect(() => {
@@ -30,22 +31,30 @@ export default function Login(props) {
     if (!data.password || !data.email) {
       return;
     }
+    console.log(data);
     auth
       .authorize(data.email, data.password)
       .then((data) => {
+        console.log(data);
         if (data) {
           if (data.token) {
             setState(false);
+            setToken(data.token);
+            localStorage.setItem("token", data.token);
             return;
           }
         } else {
           setImageUrl(fail);
           setMessage("Oops, something went wrong! Please try again.");
           setState(true);
+          throw new Error("email or password is not correct");
         }
       })
       .then(() => {
-        if (!state) handleLogin(e);
+        if (!state) {
+          handleLogin(e);
+          console.log(isLoggedIn);
+        }
       })
       .catch((err) => console.log(err))
       .finally(() => {

@@ -5,7 +5,8 @@ class Api {
   }
 
   loadUserInfo(token) {
-    return fetch(`${this.url}/users/me`, {
+    return fetch(`${this.url}/users`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${token}`,
@@ -64,10 +65,6 @@ class Api {
         authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        likes: [],
-        _id: id,
-      }),
     }).then(this._checkResponse);
   }
 
@@ -110,6 +107,8 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://api.around-the-us.students.nomoreparties.sbs",
+  baseUrl: "http://localhost:8000",
 });
 export default api;
+
+// https://api.around-the-us.students.nomoreparties.sbs

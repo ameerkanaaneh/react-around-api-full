@@ -22,7 +22,7 @@ const validateURL = (value, helpers) => {
 const cardsRouter = require(path.join(__dirname, "/routes/cards.js"));
 const usersRouter = require(path.join(__dirname, "/routes/users.js"));
 
-const { PORT = 3000 } = process.env;
+const { PORT = 8000 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,8 +36,8 @@ app.use(requestLogger);
 app.use(cors());
 app.options("*", cors());
 
-app.use("/cards", auth, usersRouter);
-app.use("/users", auth, cardsRouter);
+app.use("/users", auth, usersRouter);
+app.use("/cards", auth, cardsRouter);
 
 app.get("/crash-test", () => {
   setTimeout(() => {

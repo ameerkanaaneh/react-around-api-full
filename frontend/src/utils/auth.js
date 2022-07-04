@@ -1,4 +1,4 @@
-export const BASE_URL = "https://api.around-the-us.students.nomoreparties.sbs";
+export const BASE_URL = "http://localhost:8000";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -33,6 +33,7 @@ export const authorize = (email, password) => {
   })
     .then((res) => {
       if (res) {
+        console.log(res);
         return res.json();
       }
     })
@@ -48,7 +49,7 @@ export const authorize = (email, password) => {
 
 // sending a request to the authorization route
 export const checkToken = (token) =>
-  fetch(`${BASE_URL}/users/me`, {
+  fetch(`${BASE_URL}/users`, {
     method: "GET",
     headers: {
       Acccept: "application/json",
