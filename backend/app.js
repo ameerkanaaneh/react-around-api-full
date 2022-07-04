@@ -22,7 +22,7 @@ const validateURL = (value, helpers) => {
 const cardsRouter = require(path.join(__dirname, "/routes/cards.js"));
 const usersRouter = require(path.join(__dirname, "/routes/users.js"));
 
-const { PORT = 8000 } = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,10 +31,10 @@ mongoose.connect("mongodb://localhost:27017/aroundb");
 
 app.use(helmet());
 
-app.use(requestLogger);
-
 app.use(cors());
 app.options("*", cors());
+
+app.use(requestLogger);
 
 app.use("/users", auth, usersRouter);
 app.use("/cards", auth, cardsRouter);
