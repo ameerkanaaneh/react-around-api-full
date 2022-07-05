@@ -37,9 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^3.2.3"
-  },
-  "homepage": "https://ameerkanaaneh.github.io/react-around-auth/"
+  }
 }

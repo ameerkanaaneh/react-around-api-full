@@ -6,6 +6,7 @@
   margin: 0;
   position: relative;
   padding: 0 50px;
+  min-height: 100vh;
 }
 
 @media screen and (max-width: 320px) {
