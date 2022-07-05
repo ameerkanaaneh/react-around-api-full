@@ -52,7 +52,6 @@ export default function Login(props) {
       .then(() => {
         if (!state) {
           handleLogin(e);
-          console.log(isLoggedIn);
         }
       })
       .catch((err) => console.log(err))

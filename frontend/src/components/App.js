@@ -235,7 +235,7 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path="*"
           element={
             <ProtectedRoute path="/" loggedIn={isLoggedIn}>
               <div className="page">
