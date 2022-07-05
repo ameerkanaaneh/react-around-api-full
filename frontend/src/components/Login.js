@@ -31,11 +31,10 @@ export default function Login(props) {
     if (!data.password || !data.email) {
       return;
     }
-    console.log(data);
+
     auth
       .authorize(data.email, data.password)
       .then((data) => {
-        console.log(data);
         if (data) {
           if (data.token) {
             setState(false);

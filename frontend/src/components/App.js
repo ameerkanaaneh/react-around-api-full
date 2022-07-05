@@ -165,7 +165,6 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    console.log(card);
     api
       .deleteCard(card._id, token)
       .then(() => {

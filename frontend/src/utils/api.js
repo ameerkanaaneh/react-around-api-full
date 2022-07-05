@@ -107,7 +107,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://api.around-the-us.students.nomoreparties.sbs",
+  baseUrl: "http://localhost:8000",
 });
 export default api;
 

@@ -46,9 +46,8 @@ module.exports.deleteCard = (req, res, next) => {
     .then((card) => {
       if (card && req.user._id.toString() === card.owner.toString()) {
         Card.deleteOne(card).then((deletedCard) => {
-          res.send(deletedCard);
+          res.send({ data: deletedCard });
         });
-        res.send({ data: card });
       } else if (!card) {
         throw new NotFoundError("Card not found");
       } else {
