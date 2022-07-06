@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const dotenv = require("dotenv");
+const AuthError = require("../errors/AuthError");
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -9,7 +10,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    return res.status(401).send({ message: "Authorization required" });
+    throw new AuthError("Authorizatoin Required");
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -23,7 +24,7 @@ module.exports = (req, res, next) => {
     );
   } catch (err) {
     // we return an error if something goes wrong
-    return res.status(401).send({ message: "Authorization required" });
+    throw new AuthError("Authorizatoin Required");
   }
   req.user = payload;
   next();

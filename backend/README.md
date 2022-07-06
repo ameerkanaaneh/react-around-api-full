@@ -1,5 +1,8 @@
 # Around the U.S. Back End
 
+[Link to API](https://api.around-the-us.students.nomoreparties.sbs)
+[Link to public domain](https://www.around-the-us.students.nomoreparties.sbs)
+
 ## Directories
 
 `/controllers` — controller files.

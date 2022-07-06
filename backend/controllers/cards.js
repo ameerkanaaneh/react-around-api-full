@@ -3,18 +3,6 @@ const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
 const AuthError = require("../errors/AuthError");
 
-function handleErrs(err, res) {
-  if (err.name === "CastError") {
-    return res.status(400).send({ message: "NotValid Data" });
-  }
-  if (err.name === "DocumentNotFoundError") {
-    return res.status(404).send({ message: "Card not found" });
-  }
-  return res
-    .status(500)
-    .send({ message: "An error has occurred on the server" });
-}
-
 // get all cards
 module.exports.getCards = (req, res, next) => {
   Card.find({})

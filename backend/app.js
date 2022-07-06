@@ -11,6 +11,7 @@ const cors = require("cors");
 const auth = require("./middlewares/auth");
 const { addUser, login } = require("./controllers/users");
 const { celebrate, Joi, errors } = require("celebrate");
+const NotFoundError = require("./errors/NotFoundError");
 
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
@@ -73,7 +74,7 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use("/", (req, res) => {
-  res.status(404).send({ message: "Requested resource not found" });
+  throw new NotFoundError("Requested resource not found");
 });
 
 app.use((err, req, res, next) => {
